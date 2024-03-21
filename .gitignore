@@ -5,4 +5,4 @@ v1.0.0/nohup.out
 
 *.elf
 
-v1.0.0/__handlers__
+v1.0.0/*__handlers__

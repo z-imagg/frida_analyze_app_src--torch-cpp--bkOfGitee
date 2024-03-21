@@ -1,7 +1,7 @@
 
 #### 前置准备
 
- [torch 1.0.0 源码克隆、编译](giteaz:3000/wiki/github-gitee-GITEA#pytorch-v100)
+ [torch 1.0.0 源码克隆、编译](http://giteaz:3000/wiki/github-gitee-GITEA#pytorch-v100)
 
 
 
