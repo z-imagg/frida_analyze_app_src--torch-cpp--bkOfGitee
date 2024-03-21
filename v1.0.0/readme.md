@@ -107,3 +107,16 @@ find ./__handlers__/ -type f | wc -l   # 共生成 88465 个js文件
 }
 ```
 
+以 c++ demangled函数名字  查询 调试信息 中 该函数的 源文件名、行号 ， 再 到torch代码仓库中 查找该源文件全路径
+```shell
+nm /home/z/torch-repo/pytorch/build/lib/libc10.so  | grep _ZN3c1010ReplaceAllERNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPKcS8_
+#0000000000050e69 T _ZN3c1010ReplaceAllERNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPKcS8_
+
+addr2line -e /home/z/torch-repo/pytorch/build/lib/libc10.so   -f -C -s 0000000000050e69
+#c10::ReplaceAll(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char const*, char const*)
+#StringUtil.cpp:28
+
+find /home/z/torch-repo/pytorch/ -name StringUtil.cpp 
+#/home/z/torch-repo/pytorch/c10/util/StringUtil.cpp
+
+```
