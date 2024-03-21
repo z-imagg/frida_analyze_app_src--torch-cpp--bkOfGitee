@@ -8,7 +8,7 @@
 #### 编译命令
 
 ```shell
-g++ -o simple_nn.elf  simple_nn.cpp -std=c++14 -I /home/z/torch-repo/pytorch/torch/csrc/api/include -I /home/z/torch-repo/pytorch/torch/lib/include/   -L/home/z/torch-repo/pytorch/torch/lib -ltorch -lc10 -lcaffe2   -Wl,-rpath,/home/z/torch-repo/pytorch/torch/lib 
+g++ -g1 -o simple_nn.elf  simple_nn.cpp -std=c++14 -I /home/z/torch-repo/pytorch/torch/csrc/api/include -I /home/z/torch-repo/pytorch/torch/lib/include/   -L/home/z/torch-repo/pytorch/torch/lib -ltorch -lc10 -lcaffe2   -Wl,-rpath,/home/z/torch-repo/pytorch/torch/lib 
 
 ```
 
@@ -27,6 +27,18 @@ ls -lh  ./simple_nn.elf
 # -0.4251  0.3480  0.1586 -0.1181 -0.2738  0.0413 -0.0257  0.0932  0.1334 -0.2221
 #  0.2962  0.1109  0.0880  0.0808 -0.2932  0.2499  0.4288  0.2070 -0.1896  0.1968
 # [ Variable[CPUFloatType]{5,10} ]
+
+```
+
+以 c++ demangled函数名字  查询 调试信息 中 该函数的 源文件名、行号 
+```shell
+
+nm ./simple_nn.elf | grep _ZNSaINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEED2Ev
+#0000000000015d4e W _ZNSaINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEED2Ev
+
+addr2line -e simple_nn.elf -f -C -s 0000000000015d4e
+#std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::~allocator()
+#allocator.h:174
 
 ```
 
@@ -65,7 +77,7 @@ ls -lh  ./simple_nn.elf
 经过人工过滤，给出 以下 ```frida-trace ...```命令， 共生成 88465 个js文件 
 ```shell
 
-frida-trace  -I "simple_nn.elf"  -I "libtorch.so.1"  -I "libc10.so"  -I "libcaffe2.so"   --file ./simple_nn.elf
+frida-trace  --decorate  -I "simple_nn.elf"  -I "libtorch.so.1"  -I "libc10.so"  -I "libcaffe2.so"   --file ./simple_nn.elf
 #此frida-trace命令运行了大约半个小时才结束，其输出如下
 
 #...
@@ -88,7 +100,7 @@ find ./__handlers__/ -type f | wc -l   # 共生成 88465 个js文件
 
 {
   onEnter(log, args, state) {
-    log('_ZN3c1010ReplaceAllERNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPKcS8_()');
+    log('_ZN3c1010ReplaceAllERNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPKcS8_()[libc10.so]');
   },
   onLeave(log, retval, state) {
   }
