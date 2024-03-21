@@ -62,7 +62,7 @@ ls -lh  ./simple_nn.elf
 ]
 ```
 
-经过人工过滤，给出 以下 ```frida-trace ...```命令：
+经过人工过滤，给出 以下 ```frida-trace ...```命令， 共生成 88465 个js文件 
 ```shell
 
 frida-trace  -I "simple_nn.elf"  -I "libtorch.so.1"  -I "libc10.so"  -I "libcaffe2.so"   --file ./simple_nn.elf
@@ -79,7 +79,7 @@ echo $? # 而且 退出码是1， 不正常退出？
 find ./__handlers__/ -type f | head -n 1
 #./__handlers__/libc10.so/_ZN3c1010ReplaceAllERNSt7__cxx11_1bfd90cc.js
 
-find ./__handlers__/ -type f | wc -l   # 共生成的js文件数 为 88465
+find ./__handlers__/ -type f | wc -l   # 共生成 88465 个js文件 
 
 ```
 
