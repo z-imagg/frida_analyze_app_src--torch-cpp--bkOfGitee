@@ -32,6 +32,34 @@ ls -lh  ./simple_nn.elf
 
 
 #### frida 小试
-```shell
-
+```frida --file ./simple_nn.elf --debug --pause``` , 输入js脚本```Process.enumerateModules().map(k=>k.name)``` ， 获得模块列表
+```javascript
+[
+    "simple_nn.elf",
+    "linux-vdso.so.1",
+    "libtorch.so.1",
+    "libc10.so",
+    "libcaffe2.so",
+    "libstdc++.so.6.0.30",
+    "libgcc_s.so.1",
+    "libc.so.6",
+    "libm.so.6",
+    "ld-linux-x86-64.so.2",
+    "libnuma.so.1.0.0",
+    "libmpi_cxx.so.40.30.1",
+    "libmpi.so.40.30.2",
+    "libopen-pal.so.40.30.2",
+    "libopen-rte.so.40.30.2",
+    "libhwloc.so.15.5.2",
+    "libevent_core-2.1.so.7.0.1",
+    "libevent_pthreads-2.1.so.7.0.1",
+    "libz.so.1.2.11",
+    "libudev.so.1.7.2",
+    "libpthread.so.0",
+    "frida-agent-64.so",
+    "libdl.so.2",
+    "librt.so.1"
+]
 ```
+
+经过人工过滤，给出 ```frida-trace  -I "simple_nn.elf"  -I "libtorch.so.1"  -I "libc10.so"  -I "libcaffe2.so"   --file ./simple_nn.elf```
