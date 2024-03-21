@@ -62,4 +62,36 @@ ls -lh  ./simple_nn.elf
 ]
 ```
 
-经过人工过滤，给出 ```frida-trace  -I "simple_nn.elf"  -I "libtorch.so.1"  -I "libc10.so"  -I "libcaffe2.so"   --file ./simple_nn.elf```
+经过人工过滤，给出 以下 ```frida-trace ...```命令：
+```shell
+
+frida-trace  -I "simple_nn.elf"  -I "libtorch.so.1"  -I "libc10.so"  -I "libcaffe2.so"   --file ./simple_nn.elf
+#此frida-trace命令运行了大约半个小时才结束，其输出如下
+
+#...
+#1737977 ms     |    |    |    |    | _ZNSt8__detail16_Hashtable_allocISaINS_10_Hash_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiELb1EEEEE17_M_node_allocatorEv()
+#1737977 ms     |    |    |    |    |    | _ZNSt8__detail21_Hashtable_ebo_helperILi0ESaINS_10_Hash_nodeISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiELb1EEEELb1EE6_S_getERSD_()
+#Process terminated
+
+echo $? # 而且 退出码是1， 不正常退出？
+
+# 生成了大量.js文件, 列举其中一个js文件如下
+find ./__handlers__/ -type f | head -n 1
+#./__handlers__/libc10.so/_ZN3c1010ReplaceAllERNSt7__cxx11_1bfd90cc.js
+
+find ./__handlers__/ -type f | wc -l   # 共生成的js文件数 为 88465
+
+```
+
+```javascript
+//文件 ./__handlers__/libc10.so/_ZN3c1010ReplaceAllERNSt7__cxx11_1bfd90cc.js
+
+{
+  onEnter(log, args, state) {
+    log('_ZN3c1010ReplaceAllERNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPKcS8_()');
+  },
+  onLeave(log, retval, state) {
+  }
+}
+```
+
