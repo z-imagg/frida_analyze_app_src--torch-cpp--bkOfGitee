@@ -8,7 +8,7 @@
 #### 编译命令
 
 ```shell
-g++ -g1 -o simple_nn.elf  simple_nn.cpp -std=c++14 -I /home/z/torch-repo/pytorch/torch/csrc/api/include -I /home/z/torch-repo/pytorch/torch/lib/include/   -L/home/z/torch-repo/pytorch/torch/lib -ltorch -lc10 -lcaffe2   -Wl,-rpath,/home/z/torch-repo/pytorch/torch/lib 
+bash -x build.sh
 
 ```
 
